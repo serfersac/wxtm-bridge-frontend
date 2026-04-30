@@ -113,3 +113,11 @@ export const setDetailedTx = (detailedTx: CombinedBridgeTransaction | null) =>
   useTariAccountStore.setState({
     detailedTx: detailedTx,
   })
+
+export const clearBridgeHistory = () => {
+  useTariAccountStore.setState({
+    backendBridgeTxs: [],
+    backendUnwrapTxs: [],
+    combinedBridgeTxs: [],
+  })
+}

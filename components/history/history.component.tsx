@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 
-import { useTariAccountStore, setDetailedTx } from '@/store/account'
+import { useTariAccountStore, setDetailedTx, clearBridgeHistory } from '@/store/account'
 
 import { useTranslation } from 'react-i18next'
 import { BridgeHistoryListItem } from '../transactions/BridgeListItem'
@@ -51,7 +51,21 @@ export const TransactionHistory = () => {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="w-full flex flex-col p-1">
           <div className="relative">
-            <div className="flex items-center justify-center"></div>
+                <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold">Transaction History</h3>
+                    {bridgeTxs && bridgeTxs.length > 0 && (
+                        <button
+                            onClick={() => {
+                                if (window.confirm(t('clear_history_confirmation'))) {
+                                    clearBridgeHistory();
+                                }
+                            }}
+                            className="text-sm text-blue-500 hover:text-blue-700"
+                        >
+                            {t('clear_all')}
+                        </button>
+                    )}
+                </div>
             <HistoryListWrapper ref={targetRef}>
               <ListWrapper>{bridgeTxs && bridgeTxs.length > 0 ? listMarkup : emptyState}</ListWrapper>
             </HistoryListWrapper>
