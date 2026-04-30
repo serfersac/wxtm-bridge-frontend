@@ -3,9 +3,12 @@ import { create } from 'zustand'
 import useTariSigner from './signer'
 import { BackendBridgeTransaction, BackendUnwrapTransaction, CombinedBridgeTransaction } from '@/types/transactions'
 
+
+import { ethers } from 'ethers';
+
 interface TariL1WalletStoreState {
   tariAccount?: AccountData
-  availableBalance: number
+  availableBalance: string | null
   ongoingBridgeTx?: OngoingUserTransaction
   lastOngoingPaymentIdFromTU: string
   backendBridgeTxs: BackendBridgeTransaction[]
@@ -19,7 +22,7 @@ const initialState: TariL1WalletStoreState = {
     account_id: 0,
     address: '',
   },
-  availableBalance: 0,
+  availableBalance: null,
   ongoingBridgeTx: undefined,
   lastOngoingPaymentIdFromTU: '',
   backendBridgeTxs: [],
@@ -51,7 +54,9 @@ export const setTariAccount = async () => {
         account_id: account.account_id,
         address: account.address,
       },
-      availableBalance: balance?.available_balance || 0,
+      availableBalance: balance?.available_balance
+        ? ethers.utils.formatUnits(balance.available_balance, 18)
+        : null,
       lastOngoingPaymentIdFromTU: ongoingBridgeTx?.paymentId ?? '',
     })
 
